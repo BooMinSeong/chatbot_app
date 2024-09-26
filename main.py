@@ -45,6 +45,8 @@ def multi_line_input(prompt_text):
     lines = sys.stdin.read()  # Reads until EOF (Ctrl+D or Ctrl+Z)
     return lines.strip()
 
+
+
 def main():
     # Load environment variables
     load_dotenv()
@@ -116,9 +118,6 @@ def main():
                 response = bot.send_message(user_input)
             print_bot_message(response)
 
-    print("---" * 8)
-    print("| End of Conversation |")
-    print("---" * 8)
 
     # Optionally, save the conversation history
     try:
