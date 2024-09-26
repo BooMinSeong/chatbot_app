@@ -31,7 +31,7 @@ def save_data(chat_history: str, filename: str):
         print_error("SAVE_PATH environment variable not set.")
         return
 
-    file_path = os.path.join(save_path, f'{filename}.txt')
+    file_path = os.path.join(save_path, f'{filename}.md')
     try:
         with open(file_path, 'w') as file:
             file.write(chat_history)
@@ -121,7 +121,7 @@ def main():
 
     # Optionally, save the conversation history
     try:
-        summary_prompt = "Think deeply about the conversation and give it an appropriate title. The title should be short and concise, replace the spaces with '_'."
+        summary_prompt = "Think deeply about the conversation and give it an appropriate title. The title should be short and concise, replace the spaces with '_'. Don't wirte as markdown format."
         summary = bot.send_message(summary_prompt)
         if prompt_save_conversation(summary):
             save_data(bot.get_history(), summary)
