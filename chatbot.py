@@ -76,13 +76,6 @@ class ChatBot:
             print(f"An error occurred: {e}")
             return "I'm sorry, but I'm unable to process your request at the moment."
 
-    def get_history(self) -> List[Dict[str, str]]:
-        """
-        Retrieves the current conversation history.
-
-        :return: A list of message dictionaries representing the conversation history.
-        """
-        return self.chat_history
 
     def clear_history(self):
         """
@@ -152,7 +145,7 @@ class ChatBot:
         :return: A formatted string of the chat history.
         """
         history_str = ""
-        for message in self.chat_history:
+        for message in self.chat_history[:-1]: # remove final summary
             role = "User" if message["role"] == "user" else "Assistant"
             history_str += f"**{role}**: \n{message['content']}\n\n"
         return history_str.strip()
