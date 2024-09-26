@@ -24,8 +24,8 @@ def create_partial_border(content,style,title:str= None):
     half_remaining_space = remaining_space//2
 
     if title:
-        top_border = (f"┌{border_char * half_remaining_space} "
-                      f"{title} "
+        top_border = (f"┌{border_char * half_remaining_space}  "
+                      f"{title}  "
                       f"{border_char * (remaining_space - half_remaining_space)}┐")
     else:
         top_border = f"┌{border_char * (width-2)}┐"
