@@ -1,12 +1,45 @@
-from rich.console import Console
+from rich.console import Console, Group
 from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
 from rich.table import Table
 from rich.markdown import Markdown
+from rich.measure import measure_renderables
 from typing import Optional
 
 console = Console()
+
+def create_partial_border(content,style,title:str= None):
+    # Define the border characters
+    border_char = "─"  # Any character you prefer for the border
+    # width = measure_renderables(console,content)
+    width = console.width
+    wrapped_content = f"\n{content}\n"
+
+
+    # Create the top and bottom borders
+    length_of_title = len(title) if title else 0
+    space_for_title = length_of_title+4 # Adding space for borders and padding
+    remaining_space = width - space_for_title -2
+    half_remaining_space = remaining_space//2
+
+    if title:
+        top_border = (f"┌{border_char * half_remaining_space} "
+                      f"{title} "
+                      f"{border_char * (remaining_space - half_remaining_space)}┐")
+    else:
+        top_border = f"┌{border_char * (width-2)}┐"
+    bottom_border = f"└{border_char * (width-2)}┘"
+
+    # Combine the top border, content, and bottom border
+    bordered_content = Group(
+            Text(top_border, style = style),
+            Markdown(wrapped_content),
+            Text(bottom_border,style = style),
+            )
+
+    return bordered_content
+
 
 def print_welcome():
     welcome_text = Text("Welcome to the ", style="bold cyan") + Text("ChatBot!", style="bold magenta")
@@ -35,16 +68,10 @@ def print_model_status(model:str):
     console.print(f"Cuurent answering model: [bold green]{model}[/bold green]")
 
 def print_user_message(message: str):
-    # user_text = Text("You: ", style="bold cyan") + Text(message, style="white")
-    user_text = message
-    user_text = Markdown(user_text)
-    console.print(Panel(user_text, title="User", border_style="cyan"))
+    console.print(create_partial_border(message, title = "User", style = 'bold cyan'))
 
 def print_bot_message(message: str):
-    # bot_text = Text("ChatBot: ", style="bold magenta") + Text(message, style="white")
-    bot_text = message
-    bot_text = Markdown(bot_text)
-    console.print(Panel(bot_text, title="Assistant", border_style="magenta"))
+    console.print(create_partial_border(message, title = "Assistant", style = 'bold magenta'))
 
 def print_error(message: str):
     console.print(f"[bold red]Error:[/bold red] {message}")
