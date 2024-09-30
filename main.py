@@ -17,11 +17,15 @@ from ui import (
 from rich.console import Console
 import sys
 
-def del_cached_chatlog():
-    pass
+class chatlog_handle:
+    def del_cached_chatlog():
+        pass
 
-def load_cached_chatlog():
-    pass
+    def load_cached_chatlog():
+        pass
+
+    def save_chatlog():
+        pass
 
 def save_data(chat_history: str, filename: str):
     # change to prompt toolkit?
