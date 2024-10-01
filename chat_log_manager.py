@@ -2,23 +2,23 @@ import os
 import glob
 from datetime import datetime
 
-class ChatLogHandle:
+class ChatLogManager:
     def __init__(self):
         """
         Initializes the ChatLogHandle object by setting the save path and preparing to handle chat history.
         """
-        self.save_path = _get_save_path()
+        self.save_path = self._get_save_path()
         self.max_cached_files = 10  # Maximum number of cached files allowed to retain
         self.filename = f'cached_chatlog_{datetime.now().strftime("%Y-%m-%d_%H-%M")}.jsonl'
 
         # cleaning cached file
         self.cleanup_cached_files()
 
-    def _get_save_path(self):
-        path = os.getenv('CACHE_PATH')
+    def _get_save_path(self,custom_path:str = None):
+        path = custom_path if custom_path else os.getenv('CACHE_PATH')
         if not path:
             raise EnvironmentError("SAVE_PATH environment variable not set.")
-        if not os.path.isdir(self.save_path):  # Ensure the path exists and is a directory
+        if not os.path.isdir(path):  # Ensure the path exists and is a directory
             raise FileNotFoundError(f"Cache directory '{self.save_path}' does not exist.")
         return path
         
@@ -37,23 +37,22 @@ class ChatLogHandle:
             except Exception as e:
                 print_error(f"Failed to delete cached chat log: {e}")
 
-    def load_cached_chatlog(self, prefix='cached_chatlog'):
+    def show_chached_chatlog_list(self):
+        cached_files_list = os.listdir(self.save_path)
+        for file_name in cached_files_list:
+            print(file)
+
+
+    def load_cached_chatlog(self, filename='cached_chatlog'):
         """
         Loads the latest cached chat log based on the provided prefix.
         """
-        if self.save_path:
-            cached_files = glob.glob(os.path.join(self.save_path, f'{prefix}*.md'))  # Get matching files
-            if cached_files:
-                latest_file = max(cached_files, key=os.path.getctime)  # Find the latest file by creation time
-                try:
-                    with open(latest_file, 'r') as file:  # Read contents of the latest chat log
-                        chat_history = [json.loads(line) for line in file] # jsonl 파일 로딩 방식 확인하기
-                    print_info(f"Loaded history from {latest_file}.")
-                except Exception as e:
-                    print_error(f"Failed to load cached chat log: {e}")
-            else:
-                print_info("No cached chat log found.")
-
+        try:
+            with open(latest_file, 'r') as file:  # Read contents of the latest chat log
+                chat_history = [json.loads(line) for line in file] # jsonl 파일 로딩 방식 확인하기
+            print_info(f"Loaded history from {latest_file}.")
+        except Exception as e:
+            print_error(f"Failed to load cached chat log: {e}")
         return chat_history
 
     def save_chatlog(self,chat_history):
