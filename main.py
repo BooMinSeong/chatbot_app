@@ -73,10 +73,19 @@ def handle_command(command_parts, bot,chat_log_manager):
          print_cache_chat_logs(chat_history_list)
          return False
 
-     elif command =='/load_history':
-         change_history_filename = input("Enter the filename : ")
-         bot.chat_history =chat_log_manager.load_from_chatlog(change_history_filename)
+     elif command == '/load_history':
+         try:
+             change_history_filename = input("Enter the filename: ")
+             bot.chat_history = chat_log_manager.load_from_chatlog(change_history_filename)
+             print_info(f"Chat history from '{change_history_filename}' has been loaded.")
+         except FileNotFoundError:
+             print_error(f"File '{change_history_filename}' not found. Please check the filename and try again.")
+         except PermissionError:
+             print_error(f"Permission denied for file '{change_history_filename}'. Check your access rights.")
+         except Exception as e:
+             print_error(f"An error occurred while loading the history: {str(e)}")
          return False
+
 
      elif command == '/clear_history':
          bot.clear_history()

@@ -42,7 +42,7 @@ class ChatLogManager:
             except Exception as e:
                 print_error(f"Failed to delete cached chat log: {e}")
 
-    def show_chached_chatlog_list(self):
+    def show_cached_chatlog_list(self):
         cached_files_list = os.listdir(self.save_path)
         return cached_files_list
 
