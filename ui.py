@@ -3,6 +3,7 @@ from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
 from rich.table import Table
+from rich.columns import Columns
 from rich.markdown import Markdown
 from rich.measure import measure_renderables
 from typing import Optional
@@ -53,10 +54,13 @@ def print_welcome():
         ["/change_model <model_name>", "Change the AI model."],
         ["/model_list", "List the available models."],
         ["/undo", "Remove the last interaction."],
+        ["/history_list", "List all cached chat logs."],
+        ["/load_history", "Load a previous chat history by filename."],
         ["/clear_history", "Clear the conversation history."],
         ["/help", "Show help message."],
         ["/exit or /quit or /bye", "Exit the chat."]
     ]
+
 
     for cmd, desc in commands:
         commands_table.add_row(cmd, desc)
@@ -79,9 +83,19 @@ def print_error(message: str):
 def print_info(message: str):
     console.print(f"[bold yellow]Info:[/bold yellow] {message}")
 
-def prompt_save_conversation(summary: str) -> bool:
+def print_prompt_save_conversation(summary: str) -> bool:
     prompt_text = f"Do you want to save this conversation summary: \"{summary}\"? (yes/no)"
-    return Prompt.ask(prompt_text, choices=["yes", "no"], default="no").lower() == "yes"
+    yes_or_no = Prompt.ask(prompt_text, choices=["yes", "no"], default="no")
+    return yes_or_no
+
+def print_cache_chat_logs(chat_cache_list:list):
+    console.print("[bold yellow]Chat History[/bold yellow]")
+    # columns = Columns(chat_cache_list, equal=True, expand=True)
+    total_text= ""
+    for filename in chat_cache_list:
+        total_text+=f"- {filename}\n"
+    console.print(total_text)
+        
 
 def print_model_list(models: list):
     table = Table(title="Available Models", show_header=True, header_style="bold blue")
