@@ -54,10 +54,13 @@ def print_welcome():
         ["/change_model <model_name>", "Change the AI model."],
         ["/model_list", "List the available models."],
         ["/undo", "Remove the last interaction."],
+        ["/history_list", "List all cached chat logs."],
+        ["/load_history", "Load a previous chat history by filename."],
         ["/clear_history", "Clear the conversation history."],
         ["/help", "Show help message."],
         ["/exit or /quit or /bye", "Exit the chat."]
     ]
+
 
     for cmd, desc in commands:
         commands_table.add_row(cmd, desc)
@@ -85,10 +88,14 @@ def print_prompt_save_conversation(summary: str) -> bool:
     yes_or_no = Prompt.ask(prompt_text, choices=["yes", "no"], default="no")
     return yes_or_no
 
-def print_cache_chat_logs(chat_list:list):
-    columns = Columns(directory, equal=True, expand=True)
+def print_cache_chat_logs(chat_cache_list:list):
     console.print("[bold yellow]Chat History[/bold yellow]")
-    console.print(columns)
+    # columns = Columns(chat_cache_list, equal=True, expand=True)
+    total_text= ""
+    for filename in chat_cache_list:
+        total_text+=f"- {filename}\n"
+    console.print(total_text)
+        
 
 def print_model_list(models: list):
     table = Table(title="Available Models", show_header=True, header_style="bold blue")
