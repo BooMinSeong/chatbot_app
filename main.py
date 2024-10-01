@@ -8,10 +8,11 @@ from ui import (
     print_bot_message,
     print_error,
     print_info,
-    prompt_save_conversation,
+    print_prompt_save_conversation,
     print_model_list,
     print_help,
-    print_model_status
+    print_model_status,
+    print_cache_chat_logs
 )
 from chat_log_manager import ChatLogManager
 from rich.console import Console
@@ -41,7 +42,7 @@ def multi_line_input(prompt_text):
     lines = sys.stdin.read()  # Reads until EOF (Ctrl+D or Ctrl+Z)
     return lines.strip()
 
-def handle_command(command_parts, bot):
+def handle_command(command_parts, bot,chat_log_manager):
      command = command_parts[0].lower()
 
      if command in ['/exit', '/quit', '/bye']:
@@ -67,7 +68,14 @@ def handle_command(command_parts, bot):
          print_info("Last interaction has been removed from history.")
          return False
 
-     elif command == '/load_history':
+     elif command == '/history_list':
+         chat_history_list= chat_log_manager.show_cached_chatlog_list()
+         print_cache_chat_logs(chat_history_list)
+         return False
+
+     elif command =='/load_history':
+         change_history_filename = input("Enter the filename : ")
+         bot.chat_history =chat_log_manager.load_from_chatlog(change_history_filename)
          return False
 
      elif command == '/clear_history':
@@ -102,7 +110,6 @@ def main():
 
     while True:
         print_model_status(bot.model)
-        # user_input = Prompt.ask("You")
         user_input = multi_line_input("Ask your question.")
 
         if not user_input.strip():
@@ -111,10 +118,12 @@ def main():
         # Check for commands (prefix with '/')
         if user_input.startswith('/'):
             command_parts = user_input.split()
-            exit_signal = handle_commnad(command_parts, bot)
+            exit_signal = handle_command(command_parts, bot,log_handler)
+            if exit_signal:
+                break
 
+        # Regular user message
         else:
-            # Regular user message
             print_user_message(user_input)
             with console.status("[bold green]Working on tasks...") as status:
                 response = bot.send_message(user_input)
@@ -126,7 +135,7 @@ def main():
     try:
         summary_prompt = "Think deeply about the conversation and give it an appropriate title. The title should be short and concise, replace the spaces with '_'. Don't wirte as markdown format."
         summary = bot.send_message(summary_prompt)
-        if prompt_save_conversation(summary):
+        if print_prompt_save_conversation(summary).lower()=='yes':
             save_data(bot.get_history(), summary)
     except Exception as e:
         print_error(f"An error occurred while summarizing: {e}")

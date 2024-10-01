@@ -82,7 +82,8 @@ def print_info(message: str):
 
 def print_prompt_save_conversation(summary: str) -> bool:
     prompt_text = f"Do you want to save this conversation summary: \"{summary}\"? (yes/no)"
-    return Prompt.ask(prompt_text, choices=["yes", "no"], default="no").lower() == "yes"
+    yes_or_no = Prompt.ask(prompt_text, choices=["yes", "no"], default="no")
+    return yes_or_no
 
 def print_cache_chat_logs(chat_list:list):
     columns = Columns(directory, equal=True, expand=True)

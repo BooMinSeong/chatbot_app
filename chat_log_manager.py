@@ -1,6 +1,11 @@
 import os
 import glob
 from datetime import datetime
+import json
+from ui import (
+        print_info,
+        print_error
+)
 
 class ChatLogManager:
     def __init__(self):
@@ -19,7 +24,7 @@ class ChatLogManager:
         if not path:
             raise EnvironmentError("SAVE_PATH environment variable not set.")
         if not os.path.isdir(path):  # Ensure the path exists and is a directory
-            raise FileNotFoundError(f"Cache directory '{self.save_path}' does not exist.")
+            raise FileNotFoundError(f"Cache directory '{path}' does not exist.")
         return path
         
     def _del_cached_chatlog(self):
@@ -39,18 +44,17 @@ class ChatLogManager:
 
     def show_chached_chatlog_list(self):
         cached_files_list = os.listdir(self.save_path)
-        for file_name in cached_files_list:
-            print(file)
+        return cached_files_list
 
 
-    def load_cached_chatlog(self, filename='cached_chatlog'):
+    def load_from_chatlog(self, filename='cached_chatlog'):
         """
-        Loads the latest cached chat log based on the provided prefix.
+        Loads the latest cached chat log based on filename.
         """
         try:
-            with open(latest_file, 'r') as file:  # Read contents of the latest chat log
+            with open(os.path.join(self.save_path,filename), 'r') as file:  # Read contents of the latest chat log
                 chat_history = [json.loads(line) for line in file] # jsonl 파일 로딩 방식 확인하기
-            print_info(f"Loaded history from {latest_file}.")
+            print_info(f"Loaded history from {filename}.")
         except Exception as e:
             print_error(f"Failed to load cached chat log: {e}")
         return chat_history
@@ -59,12 +63,9 @@ class ChatLogManager:
         """
         Saves the current chat history to a new file with a timestamped filename.
         """
-
         # Create a filename with the current timestamp
         file_path = os.path.join(self.save_path, self.filename)
         
-        self._del_cached_chatlog()
-
         try:
             with open(file_path, 'w') as file:  # Write the chat history to the new file
                 for message in chat_history:
