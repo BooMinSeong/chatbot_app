@@ -3,6 +3,7 @@ from rich.prompt import Prompt
 from rich.panel import Panel
 from rich.text import Text
 from rich.table import Table
+from rich.columns import Columns
 from rich.markdown import Markdown
 from rich.measure import measure_renderables
 from typing import Optional
@@ -79,9 +80,14 @@ def print_error(message: str):
 def print_info(message: str):
     console.print(f"[bold yellow]Info:[/bold yellow] {message}")
 
-def prompt_save_conversation(summary: str) -> bool:
+def print_prompt_save_conversation(summary: str) -> bool:
     prompt_text = f"Do you want to save this conversation summary: \"{summary}\"? (yes/no)"
     return Prompt.ask(prompt_text, choices=["yes", "no"], default="no").lower() == "yes"
+
+def print_cache_chat_logs(chat_list:list):
+    columns = Columns(directory, equal=True, expand=True)
+    console.print("[bold yellow]Chat History[/bold yellow]")
+    console.print(columns)
 
 def print_model_list(models: list):
     table = Table(title="Available Models", show_header=True, header_style="bold blue")
