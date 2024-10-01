@@ -57,12 +57,6 @@ class ChatBot:
             response = openai.chat.completions.create(
                 model=self.model,
                 messages=self._format_system_prompt(),
-#                messages=self.chat_history,
-#                temperature=0.7,  # Adjust for creativity
-#                max_tokens=150,   # Adjust based on desired response length
-#                top_p=1.0,
-#                frequency_penalty=0.0,
-#                presence_penalty=0.0
             )
             # Extract the assistant's reply
             assistant_message = response.choices[0].message.content.strip()
