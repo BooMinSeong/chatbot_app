@@ -9,37 +9,53 @@ from typing import Optional
 
 console = Console()
 
-def create_partial_border(content,style,title:str= None):
-    # Define the border characters
-    border_char = "─"  # Any character you prefer for the border
-    # width = measure_renderables(console,content)
+#def create_oneline(style:str = 'blue cyan',title:str= None):
+#    # Define the border characters
+#    border_char = "─"  # Any character you prefer for the border
+#    width = console.width
+#
+#
+#    if title:
+#        # Create the top and bottom borders
+#        length_of_title = len(title)
+#        space_for_title = length_of_title+4 # Adding space for borders and padding
+#        remaining_space = width - space_for_title
+#        half_remaining_space = remaining_space//2
+#
+#        border = (f"{border_char * half_remaining_space} "
+#                      f"{title} "
+#                      f"{border_char * (remaining_space - half_remaining_space)}")
+#    else:
+#        border = f"{border_char * (width)}"
+#
+#    return Text(border,style = style)
+
+def create_oneline(style: str = 'blue cyan', title: str = None):
+    console = Console()  # Create a console object
+    border_char = "─"  # Border character
     width = console.width
-    wrapped_content = f"\n{content}\n"
-
-
-    # Create the top and bottom borders
-    length_of_title = len(title) if title else 0
-    space_for_title = length_of_title+4 # Adding space for borders and padding
-    remaining_space = width - space_for_title -2
-    half_remaining_space = remaining_space//2
 
     if title:
-        top_border = (f"┌{border_char * half_remaining_space} "
-                      f"{title} "
-                      f"{border_char * (remaining_space - half_remaining_space)}┐")
+        length_of_title = len(title)
+        padding = 2  # We will use 2 spaces for padding around the title
+        total_length = length_of_title + padding
+
+        if total_length <= width:
+            remaining_space = width - total_length
+            half_remaining_space = remaining_space // 2
+
+            border = (f"{border_char * half_remaining_space}"
+                      f" {title} "
+                      f"{border_char * (remaining_space - half_remaining_space)}")
+        else:
+            # If the title (plus padding and borders) exceeds width, truncate the title
+            available_space = width - 4  # 2 for each side padding
+            truncated_title = title[:available_space]  # Truncate title if needed
+            border = f"{border_char} {truncated_title} {border_char}"  # Just leave 1 character for borders
     else:
-        top_border = f"┌{border_char * (width-2)}┐"
-    bottom_border = f"└{border_char * (width-2)}┘"
+        border = f"{border_char * width}"
 
-    # Combine the top border, content, and bottom border
-    bordered_content = Group(
-            Text(top_border, style = style),
-            Markdown(wrapped_content),
-            Text(bottom_border,style = style),
-            )
-
-    return bordered_content
-
+    return Text(border, style=style)
 
 def print_welcome():
     welcome_text = Text("Welcome to the ", style="bold cyan") + Text("ChatBot!", style="bold magenta")
@@ -67,11 +83,16 @@ def print_welcome():
 def print_model_status(model:str):
     console.print(f"Cuurent answering model: [bold green]{model}[/bold green]")
 
-def print_user_message(message: str):
-    console.print(create_partial_border(message, title = "User", style = 'bold cyan'))
+def print_user_message(title:str = None):
+    if title:
+        console.print(create_oneline(title = title, style = 'bold cyan'))
+    else:
+        console.print(create_oneline(style = 'bold cyan'))
 
 def print_bot_message(message: str):
-    console.print(create_partial_border(message, title = "Assistant", style = 'bold magenta'))
+    console.print(create_oneline(title = "Assistant", style = 'bold magenta'))
+    console.print(Markdown(f"\n{message}\n"))
+    console.print(create_oneline(style = 'bold magenta'))
 
 def print_error(message: str):
     console.print(f"[bold red]Error:[/bold red] {message}")
