@@ -49,6 +49,7 @@ def print_welcome():
         ["/change_model <model_name>", "Change the AI model."],
         ["/model_list", "List the available models."],
         ["/undo", "Remove the last interaction."],
+        ["/copy", "Copy the last bot response to the clipboard"],
         ["/history_list", "List all cached chat logs."],
         ["/load_history", "Load a previous chat history by filename."],
         ["/clear_history", "Clear the conversation history."],
