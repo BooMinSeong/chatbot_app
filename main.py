@@ -26,6 +26,10 @@ def save_data(chat_history: str, filename: str):
     if not save_path:
         print_error("SAVE_PATH environment variable not set.")
         return
+    if not os.path.isdir(save_path):
+        print_error("SAVE_PATH environment variable is not a valid directory.")
+        return
+
 
     file_path = os.path.join(save_path, f'{filename}.md')
 
