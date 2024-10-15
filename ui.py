@@ -63,6 +63,10 @@ def print_welcome():
     console.print(commands_table)
     console.print("\nType your message and press Enter to chat. Use the commands listed above as needed.\n")
 
+def print_text(text:str):
+    # This fucntion is made for testing system
+    console.print(text)
+
 def print_model_status(model:str):
     console.print(f"Cuurent answering model: [bold green]{model}[/bold green]")
 

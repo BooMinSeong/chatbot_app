@@ -16,7 +16,7 @@ from ui import (
 )
 from chat_log_manager import ChatLogManager
 from rich.console import Console
-import sys
+import pyperclip
 
 def save_data(chat_history: str, filename: str):
     # change to prompt toolkit?
@@ -71,6 +71,11 @@ def handle_command(command_parts, bot,chat_log_manager):
      elif command == '/undo':
          bot.remove_last_interaction()
          print_info("Last interaction has been removed from history.")
+         return False
+
+     elif command == '/copy':
+         pyperclip.copy(bot.chat_history[-1]['content'])
+         print_info("Last interaction has been located on the clipboard")
          return False
 
      elif command == '/history_list':
