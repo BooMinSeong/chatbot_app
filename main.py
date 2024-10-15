@@ -18,7 +18,6 @@ from chat_log_manager import ChatLogManager
 from rich.console import Console
 import sys
 
-
 def save_data(chat_history: str, filename: str):
     # change to prompt toolkit?
     """Saves the chat history to a file."""
