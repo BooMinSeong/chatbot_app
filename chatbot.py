@@ -139,7 +139,7 @@ class ChatBot:
         :return: A formatted string of the chat history.
         """
         history_str = ""
-        for message in self.chat_history[:-1]: # remove final summary
+        for message in self.chat_history[:-2]: # remove final summary query
             role = "User" if message["role"] == "user" else "Assistant"
-            history_str += f"**{role}**: \n{message['content']}\n\n"
+            history_str += f"**{role}**: \n\n{message['content']}\n\n"
         return history_str.strip()
