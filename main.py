@@ -64,7 +64,6 @@ def main():
 
     while True:
         print_model_status(bot.model)
-        # user_input = Prompt.ask("You")
         user_input = multi_line_input("Ask your question.")
 
         if not user_input.strip():
