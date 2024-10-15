@@ -9,27 +9,6 @@ from typing import Optional
 
 console = Console()
 
-#def create_oneline(style:str = 'blue cyan',title:str= None):
-#    # Define the border characters
-#    border_char = "─"  # Any character you prefer for the border
-#    width = console.width
-#
-#
-#    if title:
-#        # Create the top and bottom borders
-#        length_of_title = len(title)
-#        space_for_title = length_of_title+4 # Adding space for borders and padding
-#        remaining_space = width - space_for_title
-#        half_remaining_space = remaining_space//2
-#
-#        border = (f"{border_char * half_remaining_space} "
-#                      f"{title} "
-#                      f"{border_char * (remaining_space - half_remaining_space)}")
-#    else:
-#        border = f"{border_char * (width)}"
-#
-#    return Text(border,style = style)
-
 def create_oneline(style: str = 'blue cyan', title: str = None):
     console = Console()  # Create a console object
     border_char = "─"  # Border character
