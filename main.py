@@ -99,6 +99,10 @@ def handle_command(command_parts, bot,chat_log_manager):
          print_help()
          return False
 
+     # Temporary command for translation it will call the translater chatbot class and translate the last bot response
+     elif command == '/korean':
+         return False
+
      else:
          print_error("Unknown command. Type /help for a list of available commands.")
          return False
@@ -113,6 +117,7 @@ def main():
     # Initialize the chatbot (API key is fetched from the environment variable)
     try:
         bot = ChatBot(api_key=os.getenv('OPENAI_API_KEY'))
+        translater = ChatBot(api_key=os.getenv('OPENAI_API_KEY')) # Add translater 영어번역을 위한 추가 클래스 선언
     except ValueError as ve:
         print_error(str(ve))
         return
