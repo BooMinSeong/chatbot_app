@@ -41,9 +41,11 @@ def save_data(chat_history: str, filename: str):
         print_error(f"Failed to save chat history: {e}")
 
 def multi_line_input(prompt_text):
+    print_user_message(title = 'User')
     print(f"{prompt_text} (Press Ctrl+D to submit input or Ctrl+Z on Windows)")
     print("You:")
     lines = sys.stdin.read()  # Reads until EOF (Ctrl+D or Ctrl+Z)
+    print_user_message()
     return lines.strip()
 
 def handle_command(command_parts, bot,chat_log_manager):
@@ -137,7 +139,6 @@ def main():
 
         # Regular user message
         else:
-            print_user_message(user_input)
             with console.status("[bold green]Working on tasks...") as status:
                 response = bot.send_message(user_input)
             print_bot_message(response)
